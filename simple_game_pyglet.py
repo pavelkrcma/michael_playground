@@ -6,12 +6,18 @@ def tik(t):
     had.x = had.x + t * 20
 
 def zpracuj_text(text):
-    if text == 'a':
+    if text == 'd':
         had.x += 10
-    if text == 'b':
+    if text == 'w':
         had.y += 10
-    if text == 'c':
+    if text == 'e':
         had.rotation += 20
+    if text == 'a':        
+        had.x -= 10
+    if text == 's':
+        had.y -= 10
+    if text == 'q':
+        had.rotation -= 20
 
 def vykresli():
     window.clear()
@@ -25,5 +31,5 @@ window.push_handlers(
 obrazek = pyglet.image.load('had.png')
 had = pyglet.sprite.Sprite(obrazek)
 
-pyglet.clock.schedule_interval(tik, 1/30)
+#pyglet.clock.schedule_interval(tik, 1/30)
 pyglet.app.run()
