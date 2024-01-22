@@ -24,10 +24,11 @@ def detect_touching_from_scheduler(t):
 #        label.text = f'Score: {global_score}'
 
 def zpracuj_stisk_klavesy(symbol, modifier):
-    # symbol parameter is number, not character.
-    # To compare it with character you have to convert char to number using ord() function
-    if symbol == ord('a'):
+    if symbol == key.A:
         pass
+
+def zpracuj_pusteni_klavesy(symbol, modifier):
+    pass
 
 def klik(x, y, tlacitko, mod):
     pass
@@ -41,6 +42,7 @@ def vykresli():
 
 window.push_handlers(
     on_key_press=zpracuj_stisk_klavesy,
+    on_key_release=zpracuj_pusteni_klavesy,
     on_draw=vykresli,
     on_mouse_press=klik,
     )
