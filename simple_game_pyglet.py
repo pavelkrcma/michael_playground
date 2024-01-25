@@ -1,6 +1,7 @@
 import pyglet
 from pyglet.window import key
 import random
+import copy
 
 """ Ideas
 Beep: print('\a')
@@ -25,6 +26,8 @@ def tick(t):
 
     if strela.visible:
         strela.y += 10
+    if strela.y > window.height:
+        strela.visible = False
 
     if key.A in list_of_keys:
         ship.x -= global_move_speed
@@ -40,7 +43,7 @@ def tick(t):
         ship.x = window.width - ship.width
     if ship.x + ship.width > window.width:
         ship.x = 1
-    
+
     if detect_touching(ship, asteroid):
         asteroid.y = window.height
         asteroid.x = random.randint(0, window.width)
