@@ -13,7 +13,8 @@ global_score = 0
 global_move_speed = 4.5
 global_asteroid_speed = 3
 
-list_of_keys = []
+# let's use set instead of list. set can have only one unique value in the same time.
+list_of_keys = set()
 
 def tick(t):
     global global_score
@@ -66,11 +67,11 @@ def detect_touching(sprite1, sprite2):
 
 def zpracuj_stisk_klavesy(symbol, modifier):
     global list_of_keys
-    list_of_keys.append(symbol)
+    list_of_keys.add(symbol)
 
 def zpracuj_pusteni_klavesy(symbol, modifier):
     global list_of_keys
-    list_of_keys.remove(symbol)
+    list_of_keys.discard(symbol)
 
 def klik(x, y, tlacitko, mod):
     pass
