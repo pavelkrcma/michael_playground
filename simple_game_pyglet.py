@@ -13,9 +13,48 @@ window = pyglet.window.Window()
 global_score = 0
 global_move_speed = 4.5
 global_asteroid_speed = 3
+global_shooting_speed = 0.3
 
 # let's use set instead of list. set can have only one unique value in the same time.
 list_of_keys = set()
+list_of_bullets = []
+last_fire = 10
+
+def asteriod_doomed():
+    global global_score
+    global global_move_speed
+    global global_asteroid_speed
+
+    asteroid.y = window.height
+    asteroid.x = random.randint(0, window.width)
+    global_score += 1
+    global_asteroid_speed += 1
+    global_move_speed += 1
+    label.text = f'Score: {global_score}'
+    beep1.play()
+
+def tick_bullet(t):
+    global list_of_bullets
+    global last_fire
+    global global_shooting_speed
+
+    if key.SPACE in list_of_keys and last_fire > global_shooting_speed:
+        new_strela = pyglet.text.Label('l', font_size = 20)
+        new_strela.x = ship.x + ship.width / 2 - 2
+        new_strela.y = ship.y + ship.height - 10
+        new_strela.visible = True
+        list_of_bullets.append(new_strela)
+        last_fire = 0
+    else:
+        last_fire += t
+
+    for bullet in list_of_bullets:
+        # Height of the bullet is not available thus using constant
+        if  bullet.y + 20 >= asteroid.y and \
+            bullet.x > asteroid.x and \
+            bullet.x < asteroid.x + asteroid.width:
+                asteriod_doomed()
+                list_of_bullets.remove(bullet)
 
 def tick(t):
     global global_score
@@ -24,20 +63,15 @@ def tick(t):
 
     asteroid.y -= global_asteroid_speed
 
-    if strela.visible:
-        strela.y += 10
-    if strela.y > window.height:
-        strela.visible = False
+    for bullet in list_of_bullets:
+        bullet.y += 10
+        if bullet.y > window.height:
+            list_of_bullets.remove(bullet)
 
     if key.A in list_of_keys:
         ship.x -= global_move_speed
     if key.D in list_of_keys:
         ship.x += global_move_speed
-
-    if key.SPACE in list_of_keys:
-        strela.x = ship.x + ship.width / 2 - 2
-        strela.y = ship.y + ship.height - 10
-        strela.visible = True
 
     if ship.x < 0:
         ship.x = window.width - ship.width
@@ -45,15 +79,9 @@ def tick(t):
         ship.x = 1
 
     if detect_touching(ship, asteroid):
-        asteroid.y = window.height
-        asteroid.x = random.randint(0, window.width)
-        global_score += 1
-        global_asteroid_speed += 1
-        global_move_speed += 1
-        label.text = f'Score: {global_score}'
-        beep1.play()
+        asteriod_doomed()
 
-    if asteroid.y + asteroid.height <= 0:
+    if asteroid.y <= 0:
         asteroid.y = window.height
         asteroid.x = random.randint(0, window.width)
         global_score = 0
@@ -83,9 +111,10 @@ def vykresli():
     window.clear()
     background_img.blit(0, 0)
     label.draw()
-    strela.draw()
     ship.draw()
     asteroid.draw()
+    for bullet in list_of_bullets:
+        bullet.draw()
 
 window.push_handlers(
     on_key_press=zpracuj_stisk_klavesy,
@@ -113,9 +142,7 @@ label = pyglet.text.Label(f'Score: {global_score}',
                           font_size=36,
                           x=0, y=window.height-36)
 
-strela = pyglet.text.Label('l', font_size = 20)
-strela.visible = False
-
 pyglet.clock.schedule_interval(tick, 1/30)
+pyglet.clock.schedule_interval(tick_bullet, 1/30)
 
 pyglet.app.run()
