@@ -1,0 +1,37 @@
+herni_blok:
+- x,y: na hernim planu
+- typ monstra, muze byt null
+- je portal? True/False
+- pro (left,right,up, bottom): pevna/pruchozi
+
+Portal:
+- pro funkcionalitu musi byt alespon 2
+- pokud ^^^ splneno skacu nahodne na jiny portal po vstupu do nej
+
+Vlastnosti hrace:
+- zivoty (default 5)
+- nasbirane artefakty
+- klice
+- zbrane
+- akce: posun, polozit blok, boj s monstrem
+
+Vlastnosti monstra:
+- sila (5-12)
+- artefakt v drzeni
+
+vsechno budou objekty a dat si praci s hierarchii. Treba monstra - bude nadtrida implementujici zakladni metody (klidne prazdne), konkretni monstrum bude mit modifikace metod
+
+Tahy:
+1. zacinam se "studankou" na pozici 0,0 (stred hraci plochy)
+2. nahodny "hod", dostanu vybrany blok
+3. vybiram umisteni bloku, dale nemohu menit pozici
+4. mohu se posunout az o 4 kroky
+4.1 pohyb konci dosazenim 4 kroku nebo ukoncenim tahu (tlacitko?)
+4.2 vyhodnocovat portal
+4.3 umoznit pouziti pergamenu (stisk klavesy?): pokud je pouzit, tak teleport na studanku (0,0)
+5. test na monstrum, pokud je monstrum tak:
+5.1 nahodny hod v rozsahu (2-12)
+5.2 pokud sila monstra > sila hodu: ztrata zivota
+5.3 pokud sila monstra == sila hodu: zadna zmena
+5.4 pokud sila monstra < sila hodu: beru artefakt
+6. konec tahu, presun na bod 2
