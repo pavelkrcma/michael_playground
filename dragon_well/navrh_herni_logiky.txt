@@ -35,3 +35,9 @@ Tahy:
 5.3 pokud sila monstra == sila hodu: zadna zmena
 5.4 pokud sila monstra < sila hodu: beru artefakt
 6. konec tahu, presun na bod 2
+
+TODO
+* vytahnout kresleni kostky do separatni funkce
+* vygenerovat nahodnou kostku
+* pridat zjisteni polohy mysi
+* pri kliku umistit kostku

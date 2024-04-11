@@ -1,5 +1,5 @@
 class GamePlanBlock:
-    def __init__(self, x, y, edges={'top': 'transparent', 'bottom': 'transparent', 'left': 'transparent', 'right': 'transparent'}, artifact=None):
+    def __init__(self, x=0, y=0, edges={'top': 'transparent', 'bottom': 'transparent', 'left': 'transparent', 'right': 'transparent'}, artifact=None):
         self.x = x
         self.y = y
         self.edges = edges
@@ -20,6 +20,9 @@ class GamePlan:
 
     def get_block(self, x, y):
         return self.blocks.get((x, y))  # Returns None if block does not exist
+    
+    def get_all_blocks(self):
+        return self.blocks
 
     def can_move(self, x, y, direction):
         """
