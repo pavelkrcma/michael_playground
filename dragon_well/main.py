@@ -30,6 +30,8 @@ game_plan.add_block(1, 0, {'top': 'opaque', 'bottom': 'transparent', 'left': 'tr
 game_plan.add_block(1, 1, {'top': 'transparent', 'bottom': 'opaque', 'left': 'transparent', 'right': 'opaque'})
 
 def CreateNewRandomBlock(x, y):
+    global random_block
+
     while True:
         top = random.choice(('transparent', 'opaque', 'transparent', 'opaque', 'transparent'))
         bottom = random.choice(('transparent', 'opaque', 'transparent'))
@@ -40,7 +42,7 @@ def CreateNewRandomBlock(x, y):
         if len(filtered) > 1:
             break
 
-    random_block = GamePlanBlock(x, y, )
+    random_block = GamePlanBlock(x, y, edges={'top': top, 'bottom': bottom, 'left': left, 'right': right})
 
 def GetEdgeColor(edge):
     return green if edge == 'transparent' else black
