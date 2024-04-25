@@ -1,3 +1,6 @@
+"""
+GamePlanBlock represents one block on the screen. Possitions X, Y are possitions on the gameplan with center 0,0. They are NOT pixel possition.
+"""
 class GamePlanBlock:
     def __init__(self, x=0, y=0, edges={'top': 'transparent', 'bottom': 'transparent', 'left': 'transparent', 'right': 'transparent'}, artifact=None):
         self.x = x
@@ -17,6 +20,9 @@ class GamePlan:
 
     def add_block(self, x, y, edges, artifact=None):
         self.blocks[(x, y)] = GamePlanBlock(x, y, edges, artifact)
+
+    def add_existing_block(self, block):
+        self.blocks[(block.x, block.y)] = block
 
     def get_block(self, x, y):
         return self.blocks.get((x, y))  # Returns None if block does not exist
