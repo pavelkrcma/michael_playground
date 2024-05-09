@@ -1,7 +1,7 @@
-"""
-GamePlanBlock represents one block on the screen. Possitions X, Y are possitions on the gameplan with center 0,0. They are NOT pixel possition.
-"""
 class GamePlanBlock:
+    """
+    GamePlanBlock represents one block on the screen. Possitions X, Y are possitions on the gameplan with center 0,0. They are NOT pixel possition.
+    """
     def __init__(self, x=0, y=0, edges={'top': 'transparent', 'bottom': 'transparent', 'left': 'transparent', 'right': 'transparent'}, artifact=None):
         self.x = x
         self.y = y
