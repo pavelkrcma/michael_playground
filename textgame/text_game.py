@@ -3,18 +3,6 @@ import random
 import time
 from console import utils
 
-# utils.wait_key()
-# utils.pause('Cekam..')
-
-"""
-penize za kolo = rand(5,11)*prumysl
-
-- konec
-- armada: koupit/prodat -> zepta se na cislo
-- prumysl: stejne jako ^^^. Max 1/10 rozlohy
-- sousedi: rand(2,6) - bude nejaky seznam. definovany vztahy s kazdym sousedem. soucasti vztahu je 'respekt' ovlivnujici pravdepodobnost udalosti.
-"""
-
 obtiznost_var = 1
 
 while True:
