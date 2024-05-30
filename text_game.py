@@ -1,6 +1,11 @@
 import os
 import random
 import time
+from console import utils
+
+# utils.wait_key()
+# utils.pause('Cekam..')
+
 """
 penize za kolo = rand(5,11)*prumysl
 
@@ -10,8 +15,22 @@ penize za kolo = rand(5,11)*prumysl
 - sousedi: rand(2,6) - bude nejaky seznam. definovany vztahy s kazdym sousedem. soucasti vztahu je 'respekt' ovlivnujici pravdepodobnost udalosti.
 """
 
-penize = random.randrange(100, 1000, 5)
-armada = random.randint(10, 50)
+obtiznost_var = 1
+
+while True:
+    obtiznost = input("zvol si obtiznost (easy, normal, hard) ")
+    if obtiznost == "easy":
+        obtiznost_var = 1
+        break
+    elif obtiznost == "normal":
+        obtiznost_var = 2
+        break
+    if obtiznost == "hard":
+        obtiznost_var = 3
+        break
+
+penize = random.randrange(400, 500 * (4 - obtiznost_var), 10)
+armada = random.randint(10, 40)
 rozloha = random.randrange(50, 151, 10)
 prumysl = random.randint(5, rozloha//10)
 
@@ -41,17 +60,8 @@ if soused_4 == "hraje":
     soused_4_utok = False
 
 kolo = 1
-while True:
-    obtiznost = input("zvol si obtiznost (easy, normal, hard) ")
-    if obtiznost == "easy":
-        obtiznost_var = 1
-        break
-    elif obtiznost == "normal":
-        obtiznost_var = 2
-        break
-    if obtiznost == "hard":
-        obtiznost_var = 3
-        break
+napoveda = True
+
 prumysl_cost_sell = 40
 prumysl_cost_buy = 50
 
@@ -63,25 +73,32 @@ armada_cost_buy = 20
 
 def vypocet_zautoceni_nepritele(cislo_soused):
     if cislo_soused == 1:
-        return (soused_1 == "hraje") and (soused_1_armada >= armada - 10) and (kolo >= 1 * 12 - obtiznost_var * 2) and (random.randint(0,4 - obtiznost_var) == 0)
+        return (soused_1 == "hraje") and (soused_1_armada >= armada - 10) and (kolo >= 1 * 10 - obtiznost_var * 2) and ((random.randint(0,4 - obtiznost_var) == 0) or (kolo > 20))
     if cislo_soused == 2:
-        return (soused_2 == "hraje") and (soused_2_armada >= armada - 10) and (kolo >= 2 * 12 - obtiznost_var * 2) and (random.randint(0,4 - obtiznost_var) == 0)
+        return (soused_2 == "hraje") and (soused_2_armada >= armada - 10) and (kolo >= 2 * 10 - obtiznost_var * 2) and ((random.randint(0,4 - obtiznost_var) == 0) or (kolo > 30))
     if cislo_soused == 3:
-        return (soused_3 == "hraje") and (soused_3_armada >= armada - 10) and (kolo >= 3 * 12 - obtiznost_var * 2) and (random.randint(0,4 - obtiznost_var) == 0)
+        return (soused_3 == "hraje") and (soused_3_armada >= armada - 10) and (kolo >= 3 * 10 - obtiznost_var * 2) and ((random.randint(0,4 - obtiznost_var) == 0) or (kolo > 40))
     if cislo_soused == 4:
-        return (soused_4 == "hraje") and (soused_4_armada >= armada - 10) and (kolo >= 4 * 12 - obtiznost_var * 2) and (random.randint(0,4 - obtiznost_var) == 0)
+        return (soused_4 == "hraje") and (soused_4_armada >= armada - 10) and (kolo >= 4 * 10 - obtiznost_var * 2) and ((random.randint(0,4 - obtiznost_var) == 0) or (kolo > 50))
     
 def print_variables():
+    
     print()
     print('=' * 75)
-    print(f"mas: {penize} penez, {armada} armady, {rozloha} rozlohy, {prumysl} prumyslu a je kolo {kolo}")
+    print(f"   mas: {penize} penez, {armada} armady, {rozloha} rozlohy, {prumysl} prumyslu a je kolo {kolo}")
     print('=' * 75)
-    print()
+    print(f"   za kolo se ti pricte: {prumysl * 10 - armada * 5}")
+    print('=' * 75)
+
+    if penize >= 1500 and napoveda:
+        print("mas hodne penez, ktere muzes puzit, kup rozlohu, armadu nebo prumysl")
+    if prumysl * 10 - armada * 5 < 0 and napoveda:
+        print("oohhh NE! prodelavas penize kazde kolo! neco s tim udelej")
 
 def ask_player():
-    global kolo, rozloha, prumysl, armada, penize, soused_1_utok, soused_2_utok, soused_3_utok, soused_4_utok, soused_1_armada, soused_2_armada, soused_3_armada, soused_4_armada
+    global kolo, rozloha, prumysl, armada, penize, soused_1_utok, soused_2_utok, soused_3_utok, soused_4_utok, soused_1_armada, soused_2_armada, soused_3_armada, soused_4_armada, napoveda, obtiznost_var
 
-    player_input = input("kterou polozku chces koupit/prodat? (armada, rozloha, prumysl, konec): ")
+    player_input = input("kterou polozku chces koupit/prodat? (armada, rozloha, prumysl, nastaveni, konec): ")
     player_input = player_input.lower()
 
     if player_input == "armada":
@@ -97,6 +114,7 @@ def ask_player():
                     penize -= player_input * armada_cost_buy
                     armada += player_input
                     print(f"- {player_input * armada_cost_buy} penez")
+                    utils.pause('Stiskni enter pro pokracovani..')
             else:
                 return
         elif player_input == "prodat":
@@ -108,6 +126,7 @@ def ask_player():
                     penize += player_input * armada_cost_sell
                     armada -= player_input
                     print(f"+ {player_input * armada_cost_sell} penez")
+                    utils.pause('Stiskni enter pro pokracovani..')
                 else:
                     return
 
@@ -124,6 +143,7 @@ def ask_player():
                     penize -= player_input * rozloha_cost_buy
                     rozloha += player_input
                     print(f"- {player_input * rozloha_cost_buy} penez")
+                    utils.pause('Stiskni enter pro pokracovani..')
             else:
                 return
 
@@ -137,6 +157,7 @@ def ask_player():
                     penize += player_input * rozloha_cost_sell
                     rozloha -= player_input
                     print(f"+ {player_input * rozloha_cost_sell} penez")
+                    utils.pause('Stiskni enter pro pokracovani..')
                 else:
                     return
 
@@ -149,10 +170,11 @@ def ask_player():
             player_input = input(f"kolik chces koupit prumyslu? (1 = {prumysl_cost_buy}$, muzes mit maximum 1\10 rozlhy): ")
             if player_input.isdecimal():
                 player_input = int(player_input)
-                if player_input * prumysl_cost_buy < penize and rozloha >= prumysl + player_input * 10:
+                if player_input * prumysl_cost_buy <= penize and rozloha >= prumysl + player_input * 10:
                     penize -= player_input * prumysl_cost_buy
                     prumysl += player_input
                     print(f"- {player_input * prumysl_cost_buy} penez")
+                    utils.pause('Stiskni enter pro pokracovani..')
             else:
                 return
         elif player_input == "prodat":
@@ -164,11 +186,40 @@ def ask_player():
                     penize += player_input * prumysl_cost_sell
                     prumysl -= player_input
                     print(f"{player_input * prumysl_cost_sell} penez")
+                    utils.pause('Stiskni enter pro pokracovani..')
                 else:
                     return
+                
+
+    elif player_input == "nastaveni":
+        player_input = input("co chces zmenit? (obtiznost, napoveda): ")
+        if player_input == "obtiznost":
+                while True:
+                    obtiznost = input("zvol si obtiznost (easy, normal, hard) ")
+                    if obtiznost == "easy":
+                        obtiznost_var = 1
+                        print("zmnenil jsi obtiznost na EASY")
+                        break
+                    elif obtiznost == "normal":
+                        obtiznost_var = 2
+                        print("zmnenil jsi obtiznost na NORMAL")
+                        break
+                    if obtiznost == "hard":
+                        obtiznost_var = 3
+                        print("zmnenil jsi obtiznost na HARD")
+                        break
+                utils.pause('Stiskni enter pro pokracovani..')
+
+        if player_input == "napoveda":
+            player_input = input("chces mit zaplou napovedu? (ANO, NE)")
+            if player_input == "ano":
+                napoveda = True
+            elif player_input == "ne":
+                napoveda = False
+            utils.pause('Stiskni enter pro pokracovani..')
 
     elif player_input == "konec":
-        penize_za_kolo =  prumysl * random.randint(5, 11)
+        penize_za_kolo =  prumysl * 10
         odcteni_za_kolo = 5 * armada
         celkove_penize_za_kolo = penize_za_kolo - odcteni_za_kolo
         penize += celkove_penize_za_kolo
@@ -178,28 +229,50 @@ def ask_player():
         else:
             print(f"+ {celkove_penize_za_kolo}")
         
-        soused_1_utok = vypocet_zautoceni_nepritele(1)
+        utils.pause('Stiskni enter pro pokracovani..')
+
         if soused_1_utok:
             print("TVUJ SOUSED 1 TE NAPADL!, skus se ubranit")
-            armada -= armada // 100 * (15 + 5 * obtiznost_var)
+            armada -= 5 + 5 * obtiznost_var
             soused_1_armada -= soused_1_armada // 100 * 90
-        soused_2_utok = vypocet_zautoceni_nepritele(2)
+            utils.pause('Stiskni enter pro pokracovani..')
+        else:
+            if soused_1 == "hraje":
+                soused_1_utok = vypocet_zautoceni_nepritele(1)
+
         if soused_2_utok:
             print("TVUJ SOUSED 2 TE NAPADL!, skus se ubranit")
-            armada -= armada // 100 * (15 + 5 * obtiznost_var)
+            armada -= 5 + 5 * obtiznost_var
             soused_2_armada -= soused_2_armada // 100 * 90
-        soused_3_utok = vypocet_zautoceni_nepritele(3)
+            utils.pause('Stiskni enter pro pokracovani..')
+        else:
+            if soused_2 == "hraje":
+                soused_2_utok = vypocet_zautoceni_nepritele(2)
+
         if soused_3_utok:
             print("TVUJ SOUSED 3 TE NAPADL!, skus se ubranit")
-            armada -= armada // 100 * (15 + 5 * obtiznost_var)
+            armada -= 5 + 5 * obtiznost_var
             soused_3_armada -= soused_3_armada // 100 * 90
-        soused_4_utok = vypocet_zautoceni_nepritele(4)
+            utils.pause('Stiskni enter pro pokracovani..')
+        else:
+            if soused_3 == "hraje":
+                soused_3_utok = vypocet_zautoceni_nepritele(3)
         if soused_4_utok:
             print("TVUJ SOUSED 4 TE NAPADL!, skus se ubranit")
-            armada -= armada // 100 * (15 + 5 * obtiznost_var)
+            armada -= 5 + 5 * obtiznost_var
             soused_4_armada -= soused_4_armada // 100 * 90
+            utils.pause('Stiskni enter pro pokracovani..')
+        else:
+            if soused_4 == "hraje":
+                soused_4_utok = vypocet_zautoceni_nepritele(4)
+
 
         kolo += 1
+
+soused_1_utok = False
+soused_2_utok = False
+soused_3_utok = False
+soused_4_utok = False
 
 while armada >= 0 and rozloha >= 0:
 
