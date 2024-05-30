@@ -15,7 +15,7 @@ RUN echo 'game:hrej' | chpasswd
 RUN echo "PermitRootLogin no" >> /etc/ssh/sshd_config
 RUN echo "AllowUsers game" >> /etc/ssh/sshd_config
 RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config
-RUN echo "ForceCommand /usr/bin/python3 /usr/src/app/text_game.py" >> /etc/ssh/sshd_config
+RUN echo "ForceCommand /usr/local/bin/python3 /usr/src/app/text_game.py" >> /etc/ssh/sshd_config
 
 # Set the working directory
 WORKDIR /usr/src/app
